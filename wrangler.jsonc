@@ -5,7 +5,6 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "zuzki-notion-worker",
-	"main": "src/index.ts",
 	"compatibility_date": "2025-03-21",
 	"pages_build_output_dir": "./dist",
 	"observability": {
