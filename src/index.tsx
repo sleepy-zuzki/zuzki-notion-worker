@@ -29,8 +29,9 @@ app.get('/overlays', async (c) => {
   try {
     const response = await fetch(API_URL, {
       headers: {
-        "Content-Type": "application/json",
-        "X-GitHub-Api-Version": "2022-11-28"
+        "X-GitHub-Api-Version": "2022-11-28",
+        "Accept": "application/vnd.github.v3+json",
+        "Authorization": `Bearer ${c.env?.GITHUB_TOKEN}`
       }
     });
 
