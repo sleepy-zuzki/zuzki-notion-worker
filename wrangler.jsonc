@@ -4,7 +4,7 @@
  */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "zuzki-notion-worker",
+	"name": "zuzki-api-worker",
 	"main": "src/index.tsx",
 	"compatibility_date": "2025-03-21",
 	"observability": {
