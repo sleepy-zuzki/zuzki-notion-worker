@@ -35,6 +35,7 @@ app.get('/overlays', async (c) => {
     });
 
     if (!response.ok) {
+      console.error(response);
       return c.json({ error: 'Failed to fetch overlays' }, 400);
     }
 
