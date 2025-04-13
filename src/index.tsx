@@ -35,8 +35,16 @@ app.get('/overlays', async (c) => {
     });
 
     if (!response.ok) {
-      console.error(response);
-      return c.json({ error: 'Failed to fetch overlays' }, 400);
+      console.error('Error fetching overlays:', {
+        status: response.status,
+        statusText: response.statusText,
+        url: API_URL
+      });
+      return c.json({ 
+        error: 'Failed to fetch overlays',
+        status: response.status,
+        statusText: response.statusText 
+      }, 400);
     }
 
     const data: Overlay[] = await response.json();
