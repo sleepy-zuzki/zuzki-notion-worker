@@ -1,69 +1,48 @@
 import { Context } from 'hono';
+import { type HelixStream, type HelixUser } from '@twurple/api';
+import { getTwitchClient } from '../../core/config/twitch.client';
 
 export const twitchService = {
   async getStreamStatus(c: Context, username: string) {
-    // 1. Primero obtenemos el ID del usuario de Twitch usando el nombre de usuario
-    const userId = await this.getUserId(c, username);
-    if (!userId) {
-      return { error: 'User not found', isLive: false };
+    // 1. Primero obtenemos el objeto de usuario de Twitch
+    const user = await this.getUser(c, username);
+    if (!user) {
+      return { error: 'User not found', isLive: false, streamData: null };
     }
 
     // 2. Luego verificamos si el usuario está transmitiendo en vivo
-    const streamData = await this.getStream(c, userId);
+    const streamData = await this.getStream(c, user.id);
 
     return {
-      username,
-      userId,
+      username: user.name,
+      userId: user.id,
       isLive: streamData !== null,
-      streamData: streamData || null
+      streamData: {
+        title: streamData?.title,
+        type: streamData?.type,
+        game_name: streamData?.gameName,
+        thumbnail_url: streamData?.thumbnailUrl,
+      }
     };
   },
 
-  async getUserId(c: Context, username: string) {
-    const response = await fetch(`https://api.twitch.tv/helix/users?login=${username}`, {
-      headers: {
-        'Client-ID': c.env?.TWITCH_CLIENT_ID,
-        'Authorization': `Bearer ${c.env?.TWITCH_ACCESS_TOKEN}`
-      }
-    });
-
-    if (!response.ok) {
-      console.error('Error fetching Twitch user:', {
-        status: response.status,
-        statusText: response.statusText
-      });
+  async getUser(c: Context, username: string): Promise<HelixUser | null> {
+    try {
+      const api = getTwitchClient(c);
+      return await api.users.getUserByName(username);
+    } catch (e) {
+      console.error('Error fetching Twitch user:', e);
       return null;
     }
-
-    const data = await response.json();
-    if (data.data && data.data.length > 0) {
-      return data.data[0].id;
-    }
-
-    return null;
   },
 
-  async getStream(c: Context, userId: string) {
-    const response = await fetch(`https://api.twitch.tv/helix/streams?user_id=${userId}`, {
-      headers: {
-        'Client-ID': c.env?.TWITCH_CLIENT_ID,
-        'Authorization': `Bearer ${c.env?.TWITCH_ACCESS_TOKEN}`
-      }
-    });
-
-    if (!response.ok) {
-      console.error('Error fetching Twitch stream:', {
-        status: response.status,
-        statusText: response.statusText
-      });
+  async getStream(c: Context, userId: string): Promise<HelixStream | null> {
+    try {
+      const api = getTwitchClient(c);
+      return await api.streams.getStreamByUserId(userId);
+    } catch (e) {
+      console.error('Error fetching Twitch stream:', e);
       return null;
     }
-
-    const data = await response.json();
-    if (data.data && data.data.length > 0) {
-      return data.data[0];
-    }
-
-    return null;
   }
 };

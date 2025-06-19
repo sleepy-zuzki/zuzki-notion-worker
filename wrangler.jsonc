@@ -29,8 +29,8 @@
 	 */
 	 "vars": {
 		 "GITHUB_TOKEN": "ghp_0000000000000000000000000000000000000000",
-		 "TWITCH_API_KEY": "",
-		 "TWITCH_API_SECRET": ""
+		 "TWITCH_CLIENT_ID": "",
+		 "TWITCH_CLIENT_SECRET": ""
 	 }
 	/**
 	 * Note: Use secrets to store sensitive data.
