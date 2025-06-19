@@ -79,13 +79,16 @@ Esto construirá el proyecto y lo desplegará en tu cuenta de Cloudflare Workers
 
 ## 📁 Estructura del Proyecto
 
-El proyecto está organizado siguiendo una arquitectura modular por capas:
+El proyecto está organizado siguiendo una arquitectura modular por capas y versionada:
 
 ```
 .
 ├── src/
 │   ├── api/                # Módulo principal de la API
-│   │   ├── routes/         # Definiciones de rutas y endpoints
+│   │   ├── v1/             # API versión 1
+│   │   │   ├── routes/     # Definiciones de rutas y endpoints para la v1
+│   │   │   └── index.ts    # Punto de entrada para la API v1
+│   │   │
 │   │   ├── handlers/       # Manejadores de solicitudes HTTP
 │   │   ├── services/       # Lógica de negocio y comunicación con APIs externas
 │   │   └── middlewares/    # Middlewares de la aplicación (CORS, etc.)
@@ -104,19 +107,23 @@ El proyecto está organizado siguiendo una arquitectura modular por capas:
 
 ## 📝 Endpoints API
 
-### GitHub Data
+### API v1
 
-* `GET /api/github/overlays` - Obtener información de overlays
-* `GET /api/github/socials` - Obtener información de redes sociales
-* `GET /api/github/tecnologies` - Obtener información de tecnologías
-* `GET /api/github/layouts` - Obtener información de layouts
-* `GET /api/github/creators` - Obtener información de creadores
+#### GitHub Data
 
-### Twitch
+* `GET /api/v1/github/overlays` - Obtener información de overlays
+* `GET /api/v1/github/socials` - Obtener información de redes sociales
+* `GET /api/v1/github/tecnologies` - Obtener información de tecnologías
+* `GET /api/v1/github/layouts` - Obtener información de layouts
+* `GET /api/v1/github/creators` - Obtener información de creadores
 
-* `GET /api/twitch/stream/:username` - Verificar si un usuario de Twitch está transmitiendo en vivo
+#### Twitch
+
+* `GET /api/v1/twitch/stream/:username` - Verificar si un usuario de Twitch está transmitiendo en vivo
 
 ### Rutas Legacy (Mantenidas para compatibilidad)
+
+#### Rutas Directas
 
 * `GET /overlays` - Redirige a `/api/github/overlays`
 * `GET /socials` - Redirige a `/api/github/socials`
@@ -128,9 +135,22 @@ El proyecto está organizado siguiendo una arquitectura modular por capas:
 
 Para agregar nuevos endpoints o funcionalidades:
 
-1. Define nuevas rutas en el directorio `src/api/routes/`
+1. Define nuevas rutas en el directorio `src/api/v1/routes/` (para la versión actual)
 2. Crea los manejadores correspondientes en `src/api/handlers/`
 3. Si es necesario, implementa la lógica de negocio en `src/api/services/`
 4. Actualiza los tipos en `src/types/` si corresponde
+
+### Versionamiento de la API
+
+La API sigue un esquema de versionamiento semántico a través de la estructura de URLs:
+
+- Versión actual: `/api/v1/...`
+
+Para implementar una nueva versión (por ejemplo, v2):
+
+1. Crea un nuevo directorio `src/api/v2/` con su estructura correspondiente
+2. Implementa las nuevas rutas y funcionalidades específicas de la v2
+3. Importa y registra el nuevo módulo en `src/index.tsx` bajo la ruta `/api/v2`
+4. Mantén las versiones anteriores para garantizar la compatibilidad hacia atrás
 
 La arquitectura modular facilita la adición de nuevas características sin afectar el código existente.

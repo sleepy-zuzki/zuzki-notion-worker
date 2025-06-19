@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { getStreamStatusHandler } from '../handlers/twitch.handlers';
+import { getStreamStatusHandler } from '../../handlers/twitch.handlers';
 
 const twitchRoutes = new Hono();
 

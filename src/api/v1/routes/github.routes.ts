@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { getOverlaysHandler, getSocialsHandler, getTecnologiesHandler, getLayoutsHandler, getCreatorsHandler } from '../handlers/github.handlers';
+import { getOverlaysHandler, getSocialsHandler, getTecnologiesHandler, getLayoutsHandler, getCreatorsHandler } from '../../handlers/github.handlers';
 
 const githubRoutes = new Hono();
 
