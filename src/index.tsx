@@ -1,128 +1,42 @@
 import { Hono } from 'hono';
 import { renderer } from './renderer';
-import { cors } from 'hono/cors';
+import { corsMiddleware } from './api/middlewares';
+import { api } from './api/routes';
 
-// Types
-interface Overlay {
-  // Define your overlay properties here
-  [key: string]: any;
-}
-
-// Constants
-const API_URL = "https://github.zuzki.dev/data/";
-const CORS_CONFIG = {
-  origin: ['https://www.zuzki.dev', 'https://zuzki.dev', 'https://github.zuzki.dev', 'http://localhost:4200', 'http://localhost:8788'],
-  allowMethods: ['POST', 'GET', 'OPTIONS'],
-  exposeHeaders: ['Content-Length', 'X-Kuma-Revision'],
-  maxAge: 600,
-  credentials: true,
-};
-
+// Crear la aplicación principal
 const app = new Hono<{ Bindings: CloudflareBindings }>();
-app.use(renderer, cors(CORS_CONFIG));
 
+// Aplicar middlewares globales
+app.use(renderer, corsMiddleware);
+
+// Ruta raíz para verificar que el servicio está funcionando
 app.get('/', (c) => {
-  return c.render(<h1>Hello!</h1>)
+  return c.render(<h1>Zuzki API</h1>);
 });
 
-async function fetchEntity(c, entity) {
-  const response = await fetch(`${API_URL}/${entity}.json`, {
-    headers: {
-      "X-GitHub-Api-Version": "2022-11-28",
-      "Accept": "application/vnd.github.v3+json",
-      "Authorization": `Bearer ${c.env?.GITHUB_TOKEN}`
-    }
-  });
-  
-  if (!response.ok) {
-    console.error('Error fetching overlays:', {
-      status: response.status,
-      statusText: response.statusText,
-      url: API_URL
-    });
-    return c.json({
-      error: 'Failed to fetch overlays',
-      status: response.status,
-      statusText: response.statusText
-    }, 400);
-  }
-  
-  return response;
-}
-
+// Mantener la compatibilidad con rutas existentes para evitar romper los servicios actuales
 app.get('/overlays', async (c) => {
-  try {
-    const response = await fetchEntity(c, 'overlays');
-    
-    if (!response.ok) {
-      return response;
-    }
-    
-    const data: Overlay[] = await response.json();
-    return c.json(data);
-  } catch (error) {
-    return c.json({ error: 'Internal server error' }, 500);
-  }
+  // Redirigir internamente a la nueva estructura
+  return await api.fetch('/github/overlays', c.req.raw);
 });
 
 app.get('/socials', async (c) => {
-  try {
-    const response = await fetchEntity(c, 'socials');
-    
-    if (!response.ok) {
-      return response;
-    }
-    
-    const data: Overlay[] = await response.json();
-    return c.json(data);
-  } catch (error) {
-    return c.json({ error: 'Internal server error' }, 500);
-  }
+  return await api.fetch('/github/socials', c.req.raw);
 });
 
 app.get('/tecnologies', async (c) => {
-  try {
-    const response = await fetchEntity(c, 'tecnologies');
-    
-    if (!response.ok) {
-      return response;
-    }
-    
-    const data: Overlay[] = await response.json();
-    return c.json(data);
-  } catch (error) {
-    return c.json({ error: 'Internal server error' }, 500);
-  }
+  return await api.fetch('/github/tecnologies', c.req.raw);
 });
 
 app.get('/layouts', async (c) => {
-  try {
-    const response = await fetchEntity(c, 'layouts');
-    
-    if (!response.ok) {
-      return response;
-    }
-    
-    const data: Overlay[] = await response.json();
-    return c.json(data);
-  } catch (error) {
-    return c.json({ error: 'Internal server error' }, 500);
-  }
+  return await api.fetch('/github/layouts', c.req.raw);
 });
 
 app.get('/creators', async (c) => {
-  try {
-    const response = await fetchEntity(c, 'creators');
-    
-    if (!response.ok) {
-      return response;
-    }
-    
-    const data: Overlay[] = await response.json();
-    return c.json(data);
-  } catch (error) {
-    return c.json({ error: 'Internal server error' }, 500);
-  }
+  return await api.fetch('/github/creators', c.req.raw);
 });
 
-export default app
+// Montar todas las rutas de la API bajo el prefijo /api
+app.route('/api', api);
+
+export default app;

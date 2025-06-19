@@ -1,0 +1,9 @@
+# Variables de entorno para desarrollo local
+# Copia este archivo como .dev.vars y completa con tus propios valores
+
+# Token de GitHub para acceder a datos del repositorio
+GITHUB_TOKEN=tu_token_de_github
+
+# Credenciales de Twitch para consultar el estado de streaming
+TWITCH_CLIENT_ID=tu_client_id_de_twitch
+TWITCH_ACCESS_TOKEN=tu_token_de_acceso_de_twitch
