@@ -113,7 +113,7 @@ El proyecto está organizado siguiendo una arquitectura modular por capas y vers
 
 * `GET /api/v1/github/overlays` - Obtener información de overlays
 * `GET /api/v1/github/socials` - Obtener información de redes sociales
-* `GET /api/v1/github/tecnologies` - Obtener información de tecnologías
+* `GET /api/v1/github/technologies` - Obtener información de tecnologías
 * `GET /api/v1/github/layouts` - Obtener información de layouts
 * `GET /api/v1/github/creators` - Obtener información de creadores
 
@@ -127,7 +127,7 @@ El proyecto está organizado siguiendo una arquitectura modular por capas y vers
 
 * `GET /overlays` - Redirige a `/api/github/overlays`
 * `GET /socials` - Redirige a `/api/github/socials`
-* `GET /tecnologies` - Redirige a `/api/github/tecnologies`
+* `GET /technologies` - Redirige a `/api/github/technologies`
 * `GET /layouts` - Redirige a `/api/github/layouts`
 * `GET /creators` - Redirige a `/api/github/creators`
 

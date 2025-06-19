@@ -24,8 +24,8 @@ app.get('/socials', async (c) => {
   return await apiV1.fetch('/github/socials', c.req.raw);
 });
 
-app.get('/tecnologies', async (c) => {
-  return await apiV1.fetch('/github/tecnologies', c.req.raw);
+app.get('/technologies', async (c) => {
+  return await apiV1.fetch('/github/technologies', c.req.raw);
 });
 
 app.get('/layouts', async (c) => {

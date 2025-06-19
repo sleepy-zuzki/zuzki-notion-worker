@@ -24,12 +24,12 @@ export const getSocialsHandler = async (c: Context) => {
 };
 
 // Manejador para obtener tecnologías
-export const getTecnologiesHandler = async (c: Context) => {
+export const getTechnologiesHandler = async (c: Context) => {
   try {
-    const data = await githubService.fetchEntity(c, 'tecnologies');
+    const data = await githubService.fetchEntity(c, 'technologies');
     return c.json(data);
   } catch (error) {
-    console.error('Error fetching tecnologies:', error);
+    console.error('Error fetching technologies:', error);
     return c.json({ error: 'Internal server error' }, 500);
   }
 };
