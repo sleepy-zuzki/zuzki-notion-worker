@@ -1,11 +1,12 @@
 # Zuzki Notion Worker
 
-API basada en Cloudflare Workers que proporciona información de GitHub y estado de streaming de Twitch para el sitio web de Zuzki.
+API basada en Cloudflare Workers que proporciona información de GitHub, estado de streaming de Twitch y YouTube para el sitio web de Zuzki.
 
 ## ✨ Características
 
 *   Consulta de recursos almacenados en GitHub (overlays, redes sociales, tecnologías, layouts, creadores)
 *   Verificación de estado de streaming en Twitch para un usuario específico
+*   Verificación de estado de transmisión en vivo en YouTube para uno o múltiples canales
 *   Arquitectura modular y escalable con separación de responsabilidades
 *   Soporte para CORS configurado para dominios específicos
 
@@ -47,6 +48,7 @@ Asegúrate de tener instalado lo siguiente:
     GITHUB_TOKEN=tu_token_de_github
     TWITCH_CLIENT_ID=tu_client_id_de_twitch
     TWITCH_ACCESS_TOKEN=tu_token_de_acceso_de_twitch
+    YOUTUBE_API_KEY=tu_api_key_de_youtube
     ```
 
 ### Desarrollo Local
@@ -66,6 +68,7 @@ Las siguientes variables de entorno son necesarias para que el Worker funcione c
 * `GITHUB_TOKEN`: Token de acceso personal de GitHub para acceder a los datos del repositorio.
 * `TWITCH_CLIENT_ID`: ID de cliente para la API de Twitch.
 * `TWITCH_ACCESS_TOKEN`: Token de acceso para la API de Twitch.
+* `YOUTUBE_API_KEY`: Clave de API de YouTube para acceder a la API de YouTube Data v3.
 
 ## ☁️ Despliegue
 
@@ -120,6 +123,11 @@ El proyecto está organizado siguiendo una arquitectura modular por capas y vers
 #### Twitch
 
 * `GET /api/v1/twitch/stream/:username` - Verificar si un usuario de Twitch está transmitiendo en vivo
+
+#### YouTube
+
+* `GET /api/v1/youtube/stream/:channelId` - Verificar si un canal de YouTube está transmitiendo en vivo
+* `GET /api/v1/youtube/streams` - Verificar el estado de transmisión de múltiples canales de YouTube (requiere parámetro de consulta `channels`)
 
 ### Rutas Legacy (Mantenidas para compatibilidad)
 
